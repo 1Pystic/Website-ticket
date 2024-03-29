@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../qr.css">
+    <title>Firebase Authentication & Firestore</title>
+</head>
+
+<body>
+    <div id="signup-container">
+        <h2>Sign Up</h2>
+        <form id="signup-form" method="post">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+
+            <label for="studentID">Student ID:</label>
+            <input type="text" id="studentID" name="studentID" required>
+
+            <!-- Use an event listener instead of inline onclick attribute -->
+            <button type="submit" id="registerUser">Sign Up</button>
+
+            <button type="submit" id="Add number">Add</button>
+        </form>
+    </div>
+
+    <!-- Include Firebase -->
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/7.14.6/firebase-app.js"></script>
+
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+         https://firebase.google.com/docs/web/setup#available-libraries -->
+    <script src="https://www.gstatic.com/firebasejs/7.14.6/firebase-analytics.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.14.6/firebase-database.js"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/7.14.1-0/firebase.js"></script>
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.2/firebase-app.js";
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+        import {
+            getFirestore,
+            collection
+        } from "https://www.gstatic.com/firebasejs/9.6.2/firebase-firestore.js";
+
+        // Paste the code from Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyCMIuZUWFV9BdZPv03bNx17kiuIjXfS36E",
+            authDomain: "openhx.firebaseapp.com",
+            databaseURL: "https://openhx-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "openhx",
+            storageBucket: "openhx.appspot.com",
+            messagingSenderId: "140868351246",
+            appId: "1:140868351246:web:a495c0da3dda143d0bd35f",
+            measurementId: "G-RE7RERFZQ2"
+        };
+
+        // Initialize Firebase
+        const firebase = initializeApp(firebaseConfig);
+
+        const db = getFirestore(firebase);
+
+        // Reference the 'Users' collection
+        const userRef = firebase.database().ref("users");
+
+        document.getElementById('signup-form').addEventListener('submit', submitForm);
+
+        async function submitForm(event) {
+            event.preventDefault();
+
+            // Get values
+            const username = getInputVal('username');
+            const password = getInputVal('password');
+            const studentID = getInputVal('studentID');
+
+            // Save user to firebase
+            await saveUser(username, password, studentID);
+
+            // Reset the form after saving user
+            document.getElementById('signup-form').reset();
+        }
+
+        // Function to get form values
+        function getInputVal(id) {
+            return document.getElementById(id).value;
+        }
+
+        // Save user to firebase
+        async function saveUser(username, password, studentID) {
+            // Use 'push' instead of 'newUserRef' for generating a unique key
+            const newUserRef = userRef.push();;
+
+            // Set the data for the new user
+            await set(newUserRef, {
+                username: username,
+                password: password,
+                studentID: studentID
+            });
+        }
+    </script> -->
+    <!-- <script src="app.js"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"
+        integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+    <script>
+
+        // Initialize Firebase
+        var config = {
+            apiKey: "AIzaSyCMIuZUWFV9BdZPv03bNx17kiuIjXfS36E",
+            authDomain: "openhx.firebaseapp.com",
+            databaseURL: "https://openhx-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "openhx",
+            storageBucket: "openhx.appspot.com",
+            messagingSenderId: "140868351246",
+            appId: "1:140868351246:web:a495c0da3dda143d0bd35f",
+            measurementId: "G-RE7RERFZQ2"
+        };
+        firebase.initializeApp(config);
+        firebase.analytics();
+
+        var database = firebase.database();
+
+        // Add Data
+        $('#registerUser').on('click', function () {
+            var values = $("#signup-form").serializeArray();
+            var email = values[0].value;
+            var password = values[1].value;
+            var studentID = values[2].value;
+
+            console.log(values);
+
+            firebase.database().ref('user4/').set({
+                email: email,
+                password: password,
+                studentID: studentID
+            });
+            //$("#addUser input").val("");
+        });
+
+        $('#AddNumber').on('click', async function () {
+            // Fetch the current amount from the database
+            const amountRef = firebase.database().ref('amount/');
+            const snapshot = await amountRef.once('value');
+            const currentAmount = snapshot.val().NUM || 0; // Ensure a default value of 0
+          
+            // Increment the amount
+            const newAmount = currentAmount + 1;
+          
+            // Update the amount in the database
+            await amountRef.set({ NUM: newAmount });
+          });
+          
+    </script>
+</body>
+
+</html>

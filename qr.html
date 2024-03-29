@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-ticket with QR Code</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        #ticket-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        #qrcode {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="ticket-container">
+        <h2>Your E-ticket</h2>
+        <p>This is your electronic ticket. Please keep it secure.</p>
+
+        <div>
+            <label for="secret-key">Secret Key:</label>
+            <input type="text" id="secret-key" placeholder="Enter 6-digit key">
+        </div>
+
+        <!-- QR Code will be generated here -->
+        <div id="qrcode"></div>
+
+        <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
+        <script>
+            function generateQRCode() {
+                const alphanumericString = generateRandomAlphanumeric(10); // Change the length as needed
+                const secretKey = document.getElementById("secret-key").value;
+
+                if (secretKey.length !== 6 || !/^\d+$/.test(secretKey)) {
+                    alert("Please enter a valid 6-digit secret key.");
+                    return;
+                }
+
+                const ticketInfo = alphanumericString + secretKey;
+
+                // Generate QR Code for the ticket
+                const qrcode = new QRCode(document.getElementById("qrcode"), {
+                    text: ticketInfo,
+                    width: 128,
+                    height: 128
+                });
+            }
+
+            function generateRandomAlphanumeric(length) {
+                const charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+                let result = '';
+                for (let i = 0; i < length; i++) {
+                    result += charset.charAt(Math.floor(Math.random() * charset.length));
+                }
+                return result;
+            }
+        </script>
+
+        <button onclick="generateQRCode()">Generate QR Code</button>
+    </div>
+</body>
+</html>
